@@ -560,7 +560,7 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                return int.Parse(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date);$a.Days"));
+                return int.Parse(base.GetStringFromPS("$os = Get-CimInstance -ClassName Win32_OperatingSystem;$a = New-TimeSpan $os.LastBootUpTime (Get-Date);$a.Days"));
             }
         }
 
@@ -571,7 +571,7 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                return DateTime.ParseExact(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = $wmi.ConvertToDateTime($wmi.LastBootUpTime);$a.ToString(\"yyyy-MM-dd HH:mm\")"),"yyyy-MM-dd HH:mm", null);
+                return DateTime.ParseExact(base.GetStringFromPS("$os = Get-CimInstance -ClassName Win32_OperatingSystem;$os.LastBootUpTime.ToString(\"yyyy-MM-dd HH:mm\")"),"yyyy-MM-dd HH:mm", null);
             }
         }
 
@@ -582,7 +582,7 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                return TimeSpan.FromSeconds(double.Parse(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date);$a.TotalSeconds").ToString()));
+                return TimeSpan.FromSeconds(double.Parse(base.GetStringFromPS("$os = Get-CimInstance -ClassName Win32_OperatingSystem;$a = New-TimeSpan $os.LastBootUpTime (Get-Date);$a.TotalSeconds").ToString()));
             }
         }
 
@@ -1040,7 +1040,7 @@ namespace sccmclictr.automation.functions
             {
                 try
                 {
-                    string sProductCode = base.GetStringFromPS("(Get-WmiObject -Class CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
+                    string sProductCode = base.GetStringFromPS("(Get-CimInstance -ClassName CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
                     return sProductCode;
                 }
                 catch { }
@@ -1058,7 +1058,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                string sProductCode = base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
+                string sProductCode = base.GetStringFromPS("Get-CimInstance -Query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-CimInstance");
                 return sProductCode;
             }
             catch { }

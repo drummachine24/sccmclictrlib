@@ -27,7 +27,7 @@ namespace sccmclictr.automation.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"$Reg = [WMIClass]""root\default:StdRegProv""
 $DCOM = $Reg.GetBinaryValue(2147483650,""{0}"",""{1}"").uValue
-$security = Get-WmiObject -Namespace root/cimv2 -Class __SystemSecurity
+$security = Get-CimInstance -Namespace root/cimv2 -ClassName __SystemSecurity
 $converter = new-object system.management.ManagementClass Win32_SecurityDescriptorHelper
 $converter.BinarySDToSDDL($DCOM).SDDL
 ")]

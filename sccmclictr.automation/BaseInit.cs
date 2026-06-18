@@ -702,38 +702,7 @@ namespace sccmclictr.automation
         /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True, new TimeSpan(0,0,30));</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
         {
-            //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
-            List<PSObject> lResult = new List<PSObject>();
-            string sPSCode = string.Format("get-wmiobject -query \"{0}\" -namespace \"{1}\"", WQLQuery, WMINamespace);
-
-            if (!bShowPSCodeOnly)
-            {
-                string sHash = CreateHash(WMINamespace + WQLQuery);
-                if ((Cache.Get(sHash) != null) & !Reload)
-                {
-                    lResult = Cache.Get(sHash) as List<PSObject>;
-                }
-                else
-                {
-                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
-                    {
-                        try
-                        {
-                            lResult.Add(obj);
-                        }
-                        catch (Exception ex)
-                        {
-                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
-                        }
-                    }
-                    Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
-                }
-            }
-
-            //Trace the PowerShell Command
-            tsPSCode.TraceInformation(sPSCode);
-
-            return lResult;
+            return GetCimObjects(WMINamespace, WQLQuery, Reload, tCacheTime);
         }
 
         /// <summary>

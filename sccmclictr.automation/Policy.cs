@@ -70,7 +70,7 @@ namespace sccmclictr.automation.policy
         /// <param name="ServiceWindowID">A service window identifier.</param>
         public void DeleteServiceWindow(string ServiceWindowID)
         {
-            string sResult = baseClient.GetStringFromPS("Get-WMIObject -Namespace 'ROOT\\ccm\\Policy\\Machine\\RequestedConfig' -Query 'SELECT * FROM CCM_ServiceWindow WHERE ServiceWindowID = \"" + ServiceWindowID + "\"' | Remove-WmiObject");
+            string sResult = baseClient.GetStringFromPS("Get-CimInstance -Namespace 'ROOT\\ccm\\Policy\\Machine\\RequestedConfig' -Query 'SELECT * FROM CCM_ServiceWindow WHERE ServiceWindowID = \"" + ServiceWindowID + "\"' | Remove-CimInstance");
         }
 
         /// <summary>

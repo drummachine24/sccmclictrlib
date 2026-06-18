@@ -196,7 +196,7 @@ namespace sccmclictr.automation.functions
                 //Cache for 15minutes
                 base.cacheTime = new TimeSpan(0, 15, 0);
 
-                string sAddressWith = base.GetStringFromPS("(Get-WmiObject Win32_Processor | where {$_.DeviceID -eq 'CPU0'}).AddressWidth");
+                string sAddressWith = base.GetStringFromPS("(Get-CimInstance Win32_Processor | where {$_.DeviceID -eq 'CPU0'}).AddressWidth");
                 base.cacheTime = toldCacheTime;
 
                 if(string.Compare("64", sAddressWith, true) == 0)
@@ -218,7 +218,7 @@ namespace sccmclictr.automation.functions
                 //Cache for 15minutes
                 base.cacheTime = new TimeSpan(0, 15, 0);
 
-                string sVersion = base.GetStringFromPS("(Get-WmiObject Win32_OperatingSystem).Version");
+                string sVersion = base.GetStringFromPS("(Get-CimInstance Win32_OperatingSystem).Version");
                 base.cacheTime = toldCacheTime;
 
                 return sVersion;

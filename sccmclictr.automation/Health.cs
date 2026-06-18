@@ -190,7 +190,7 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public void DeleteCCMNamespace()
         {
-            base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
+            base.GetStringFromPS("Get-CimInstance -Query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-CimInstance");
         }
 
         /// <summary>

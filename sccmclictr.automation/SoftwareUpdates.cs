@@ -1488,7 +1488,7 @@ namespace sccmclictr.automation.functions
             /// </summary>
             public void Install()
             {
-                string sCode = string.Format("$a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID='{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", this.UpdateID);
+                string sCode = string.Format("$updates = Get-CimInstance -Query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID='{0}'\" -Namespace \"ROOT\\ccm\\ClientSDK\"; Invoke-CimMethod -Namespace \"ROOT\\ccm\\ClientSDK\" -ClassName \"CCM_SoftwareUpdatesManager\" -MethodName \"InstallUpdates\" -Arguments @{{Updates=$updates}}", this.UpdateID);
                 oNewBase.GetObjectsFromPS(sCode, true);
             }
 
@@ -1499,7 +1499,7 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public void InstallAllRequiredUpdates()
         {
-            string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
+            string sCode = string.Format("Invoke-CimMethod -Namespace \"ROOT\\ccm\\ClientSDK\" -ClassName \"CCM_SoftwareUpdatesManager\" -MethodName \"InstallUpdates\"");
             baseClient.GetObjectsFromPS(sCode, true);
         }
 
@@ -1508,7 +1508,7 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public void InstallAllApprovedUpdates()
         {
-            string sCode = string.Format(@"([wmiclass]'ROOT\ccm\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates([System.Management.ManagementObject[]] (get-wmiobject -query 'SELECT * FROM CCM_SoftwareUpdate' -namespace 'ROOT\ccm\ClientSDK'))");
+            string sCode = string.Format(@"$updates = Get-CimInstance -Query 'SELECT * FROM CCM_SoftwareUpdate' -Namespace 'ROOT\ccm\ClientSDK'; Invoke-CimMethod -Namespace 'ROOT\ccm\ClientSDK' -ClassName 'CCM_SoftwareUpdatesManager' -MethodName 'InstallUpdates' -Arguments @{Updates=$updates}");
             baseClient.GetObjectsFromPS(sCode, true);
         }
 
@@ -1593,7 +1593,7 @@ namespace sccmclictr.automation.functions
 
             string sIDs = string.Join("' OR UpdateID='", sUpdateIDs);
 
-            string sCode = string.Format("[System.Management.ManagementObject[]] $a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID like '{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", sIDs);
+            string sCode = string.Format("$updates = Get-CimInstance -Query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID='{0}'\" -Namespace \"ROOT\\ccm\\ClientSDK\"; Invoke-CimMethod -Namespace \"ROOT\\ccm\\ClientSDK\" -ClassName \"CCM_SoftwareUpdatesManager\" -MethodName \"InstallUpdates\" -Arguments @{{Updates=$updates}}", sIDs);
             baseClient.GetObjectsFromPS(sCode, true);
         }
 
